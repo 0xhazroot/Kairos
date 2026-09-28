@@ -1,0 +1,468 @@
+/* ================================================================
+   KAIRÓS — People Selector con Etiquetas Libres del Usuario
+   ================================================================ */
+
+.ps-section {
+  background: #fbfbfa;
+  border: 1px solid #f0f0ee;
+  border-radius: var(--radius-lg);
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ps-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ps-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ps-icon-main {
+  color: #64748b;
+}
+
+.ps-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.ps-count-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: #e2e8f0;
+  color: #475569;
+  padding: 2px 7px;
+  border-radius: 9999px;
+}
+
+.ps-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+  transition: all 0.15s ease;
+}
+
+.ps-toggle-btn:hover {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+/* Chips de Personas Seleccionadas */
+.ps-selected-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+}
+
+.ps-empty-tip {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.ps-person-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 6px;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1e293b;
+  transition: all 0.15s ease;
+}
+
+.ps-avatar-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.ps-chip-name {
+  font-weight: 700;
+}
+
+.ps-chip-tag-pill {
+  font-size: 0.74rem;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.ps-chip-remove {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2px;
+  border-radius: 50%;
+  padding: 2px;
+  transition: all 0.15s;
+}
+
+.ps-chip-remove:hover {
+  background: rgba(0, 0, 0, 0.08);
+  color: #0f172a;
+}
+
+/* Desplegable de Selección */
+.ps-dropdown {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ps-dropdown-header {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.ps-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 8px;
+}
+
+.ps-option-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.ps-option-card:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.ps-option-card.is-selected {
+  border-color: #6f5ba7;
+  background: #f6f3fc;
+}
+
+.ps-opt-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.ps-opt-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ps-opt-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ps-opt-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ps-opt-custom-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.ps-edit-tag-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.ps-option-card:hover .ps-edit-tag-btn {
+  opacity: 1;
+}
+
+.ps-edit-tag-btn:hover {
+  color: #4f46e5;
+  background: #eef2ff;
+}
+
+/* Edición en línea */
+.ps-inline-edit-form {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ps-inline-input {
+  border: 1px solid #6f5ba7;
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.72rem;
+  width: 100px;
+  outline: none;
+}
+
+.ps-inline-check-btn {
+  background: #6f5ba7;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.ps-opt-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ps-opt-check {
+  color: #6f5ba7;
+  width: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ps-opt-delete-btn {
+  background: transparent;
+  border: none;
+  color: #cbd5e1;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transition: all 0.15s;
+}
+
+.ps-option-card:hover .ps-opt-delete-btn {
+  opacity: 1;
+}
+
+.ps-opt-delete-btn:hover {
+  color: #ef4444;
+  background: #fee2e2;
+}
+
+/* Crear Nueva Persona con Etiqueta Libre */
+.ps-btn-create-trigger {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4f46e5;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+
+.ps-btn-create-trigger:hover {
+  background: #eef2ff;
+}
+
+.ps-create-form {
+  background: #f8fafc;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ps-form-heading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.ps-form-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .ps-form-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ps-field-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ps-field-label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.ps-input {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.84rem;
+  color: #1e293b;
+  outline: none;
+  transition: all 0.15s;
+}
+
+.ps-input:focus {
+  border-color: #6f5ba7;
+  box-shadow: 0 0 0 2px rgba(111, 91, 167, 0.15);
+}
+
+/* Sugerencias Rápidas */
+.ps-suggestions-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ps-sugg-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.ps-sugg-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ps-sugg-chip {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ps-sugg-chip:hover {
+  background: #f1f5f9;
+  border-color: #6f5ba7;
+  color: #6f5ba7;
+}
+
+.ps-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-save-person {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #6f5ba7;
+  color: #ffffff;
+  border: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-save-person:hover {
+  background: #5b4793;
+}

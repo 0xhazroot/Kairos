@@ -1,96 +1,443 @@
-.timelines-page { position: relative; }
+/* ================================================================
+   KAIRÓS — Timelines Stream (Línea Multiverso Geométrica & Armónica)
+   ================================================================ */
 
-.tl-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-lg); }
-.tl-title { font-family: var(--font-editorial); font-size: 28px; color: var(--text-primary); margin-bottom: 4px; }
-.tl-subtitle { font-size: 14px; color: var(--text-muted); }
-
-.tl-legend { display: flex; gap: 16px; align-items: center; padding-top: 6px; }
-.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--text-secondary); }
-.legend-dot { width: 10px; height: 10px; border-radius: 50%; }
-.legend-dot--sage { background: var(--pastel-sage-mid); box-shadow: 0 0 10px var(--glow-sage); }
-.legend-dot--lavender { background: var(--pastel-lavender-mid); box-shadow: 0 0 10px var(--glow-lavender); }
-
-/* Canvas del Multiverso */
-.multiverse-canvas {
+.timelines-page {
   position: relative;
-  width: 100%; min-height: 700px;
+  padding-bottom: 80px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.tl-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: var(--space-xl);
+}
+
+.tl-title {
+  font-family: var(--font-editorial);
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.tl-subtitle {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+}
+
+.tl-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* Filtros */
+.tl-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.tl-filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  border: none;
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.15s ease;
+}
+
+.tl-filter-pill:hover {
+  background: #f1f5f9;
+  color: var(--text-primary);
+}
+
+.tl-filter-pill.is-active {
+  background: #ffffff;
+  color: var(--text-primary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.dot--sage { background: #529e72; }
+.dot--lavender { background: #7c68b8; }
+.dot--convergence { background: linear-gradient(135deg, #529e72, #7c68b8); }
+
+.tl-btn-write {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #111827;
+  color: #ffffff;
+  border: none;
+  padding: 9px 20px;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.tl-btn-write:hover {
+  background: #1f2937;
+  transform: translateY(-1px);
+}
+
+/* ================================================================
+   ESTADO VACÍO (SIN DATA INVENTADA)
+   ================================================================ */
+.tl-empty-multiverse {
+  position: relative;
+  min-height: 480px;
   border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.6);
+  border: 1.5px dashed #cbd5e1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.tl-empty-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.tl-empty-card {
+  position: relative;
+  z-index: 10;
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: var(--radius-xl);
+  padding: 36px 32px;
+  text-align: center;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.empty-core-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(220, 232, 218, 0.6), rgba(229, 227, 240, 0.8));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6f5ba7;
+  margin-bottom: 4px;
+}
+
+.tl-empty-card h2 {
+  font-family: var(--font-editorial);
+  font-size: 1.6rem;
+  color: var(--text-primary);
+}
+
+.tl-empty-card p {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.btn-primary-multiverse {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #4d926a 0%, #6f5ba7 100%);
+  color: #ffffff;
+  border: none;
+  padding: 11px 24px;
+  border-radius: var(--radius-pill);
+  font-size: 0.88rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(111, 91, 167, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-primary-multiverse:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(111, 91, 167, 0.4);
+}
+
+/* ================================================================
+   FLUJO DE LÍNEA MULTIVERSO (CON DATOS REALES)
+   ================================================================ */
+.tl-river-container {
+  position: relative;
+  padding: 30px 0;
+  margin-top: 10px;
+}
+
+.tl-river-spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+}
+
+.spine-track {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #529e72 0%, #6f5ba7 50%, #e5a690 100%);
+  border-radius: 9999px;
+  opacity: 0.6;
+}
+
+.tl-milestones-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  position: relative;
+  z-index: 5;
+}
+
+.tl-milestone-row {
+  display: grid;
+  grid-template-columns: 1fr 40px 1fr;
+  align-items: center;
+  gap: 20px;
+}
+
+.tl-milestone-row--left .tl-milestone-card {
+  grid-column: 1;
+  justify-self: end;
+}
+.tl-milestone-row--left .tl-spine-node {
+  grid-column: 2;
+  justify-self: center;
+}
+
+.tl-milestone-row--right .tl-milestone-card {
+  grid-column: 3;
+  justify-self: start;
+}
+.tl-milestone-row--right .tl-spine-node {
+  grid-column: 2;
+  justify-self: center;
+}
+
+.tl-milestone-row--center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.tl-milestone-row--center .tl-spine-node {
+  margin-bottom: -15px;
+  z-index: 10;
+}
+.tl-milestone-row--center .tl-milestone-card {
+  max-width: 580px;
+  width: 100%;
+}
+
+/* Nodo central */
+.tl-spine-node {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.9), 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tl-spine-node:hover {
+  transform: scale(1.3);
+}
+
+.tl-spine-node--sage {
+  border: 3px solid #529e72;
+  color: #529e72;
+}
+
+.tl-spine-node--lavender {
+  border: 3px solid #7c68b8;
+  color: #7c68b8;
+}
+
+.tl-spine-node--convergence {
+  border: 3px solid #6f5ba7;
+  color: #6f5ba7;
+  background: linear-gradient(135deg, #f0f7f2, #f5f2fa);
+  box-shadow: 0 0 15px rgba(111, 91, 167, 0.5), 0 0 0 5px rgba(255, 255, 255, 0.9);
+}
+
+.spine-node-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Tarjeta del Recuerdo */
+.tl-milestone-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius-lg);
+  padding: 18px 22px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 420px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.tl-milestone-card--sage {
+  border-left: 4px solid #529e72;
+}
+
+.tl-milestone-card--lavender {
+  border-left: 4px solid #7c68b8;
+}
+
+.tl-milestone-card--convergence {
+  border: 1.5px solid rgba(124, 104, 184, 0.4);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(246, 243, 252, 0.95) 100%);
+  box-shadow: 0 12px 30px -8px rgba(111, 91, 167, 0.18);
+}
+
+.tl-milestone-card.is-selected {
+  border-color: #6f5ba7;
+  box-shadow: 0 0 0 2px rgba(111, 91, 167, 0.3), 0 12px 30px -8px rgba(0, 0, 0, 0.1);
+}
+
+.card-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-date-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.card-stream-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.tl-milestone-card--convergence .card-stream-tag {
+  background: linear-gradient(135deg, #dce8da, #e5e3f0);
+  color: #3b2d69;
+}
+
+.card-milestone-title {
+  font-family: var(--font-editorial);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.card-milestone-snippet {
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.stream-svg {
-  position: absolute; top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: 1; pointer-events: none;
+.card-people-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px solid #f1f5f9;
 }
 
-/* Nodos Nexus */
-.nexus-node {
-  position: absolute; z-index: 15;
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--bg-surface);
-  border: 3px solid var(--text-primary);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 18px rgba(0,0,0,0.08), 0 0 0 5px rgba(255,255,255,0.7);
-  color: var(--text-primary);
-}
-.nexus-tip {
-  position: absolute; bottom: 36px; left: 50%;
-  transform: translateX(-50%);
-  background: var(--text-primary); color: #FFFFFF;
-  font-size: 11px; font-weight: 600;
-  padding: 4px 12px; border-radius: 6px;
-  white-space: nowrap; opacity: 0;
-  pointer-events: none; transition: opacity 0.2s;
-}
-.nexus-node:hover .nexus-tip { opacity: 1; }
-
-/* Tarjetas Glassmorphism */
-.glass-memory {
-  position: absolute; z-index: 10;
-  width: 260px; padding: 14px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border: 1.5px solid var(--glass-border);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--glass-shadow);
-  cursor: pointer;
-  transform-style: preserve-3d; perspective: 1000px;
+.card-people-chips {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
 }
 
-.glass-photo {
-  position: relative; width: 100%; height: 130px;
-  border-radius: var(--radius-lg);
-  overflow: hidden; margin-bottom: 10px;
-  background: var(--border-light);
+.card-person-chip {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 4px;
+  background: #f8fafc;
+  color: #334155;
+  border: 1px solid #e2e8f0;
 }
-.glass-tag {
-  position: absolute; top: 8px; left: 8px;
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255,255,255,0.7);
-}
-.glass-date { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; display: block; }
-.glass-heading { font-family: var(--font-editorial); font-size: 16px; color: var(--text-primary); margin-bottom: 4px; line-height: 1.3; }
-.glass-snippet { font-size: 12px; color: var(--text-secondary); line-height: 1.45; }
 
-/* Barra de Épocas */
-.epoch-bar {
-  position: fixed; bottom: 24px; left: 50%;
-  transform: translateX(-50%);
-  background: rgba(255,255,255,0.88);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255,255,255,0.95);
-  border-radius: var(--radius-pill);
-  padding: 10px 24px;
-  box-shadow: 0 10px 28px rgba(0,0,0,0.07);
-  display: flex; align-items: center; gap: 14px;
-  z-index: 30;
+.card-person-chip-more {
+  font-size: 0.7rem;
+  color: #94a3b8;
 }
-.epoch-step {
-  font-size: 12px; font-weight: 600; color: var(--text-muted);
-  cursor: pointer; padding: 4px 10px; border-radius: var(--radius-pill);
-  transition: all 0.15s;
+
+/* Responsivo para móviles */
+@media (max-width: 768px) {
+  .tl-river-spine {
+    left: 20px;
+    transform: none;
+  }
+  .tl-milestone-row {
+    grid-template-columns: 40px 1fr;
+    gap: 12px;
+  }
+  .tl-milestone-row--left .tl-spine-node,
+  .tl-milestone-row--right .tl-spine-node {
+    grid-column: 1;
+  }
+  .tl-milestone-row--left .tl-milestone-card,
+  .tl-milestone-row--right .tl-milestone-card {
+    grid-column: 2;
+    justify-self: start;
+    max-width: 100%;
+  }
 }
-.epoch-step:hover, .epoch-step--active { color: var(--text-primary); background: var(--border-light); }
-.epoch-arrow { color: #D1D5DB; font-size: 13px; }

@@ -1,7 +1,23 @@
+# Dependencies
 node_modules/
+
+# Production build outputs
 dist/
+
+# Compiled Binaries (Go)
+*.exe
+kairos.exe
+
+# Local private user data (Personal memories, people & audits)
+data/*.json
+!data/.gitkeep
+
+# Environment and sensitive keys
 .env
 .env.local
+.env.*.local
+
+# Logs and system artifacts
 *.log
 .DS_Store
 Thumbs.db

@@ -1,0 +1,138 @@
+/* ================================================================
+   KAIRÓS — Confirm Modal Glassmorphic Styling
+   ================================================================ */
+
+.cm-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 16px;
+}
+
+.cm-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.18), 0 0 30px rgba(239, 68, 68, 0.1);
+  width: 100%;
+  max-width: 420px;
+  padding: 28px 24px 22px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.cm-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.cm-close-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.cm-icon-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.cm-icon-bubble {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fee2e2;
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 6px #fef2f2;
+}
+
+.cm-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cm-title {
+  font-family: var(--font-editorial);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.cm-message {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #64748b;
+  max-width: 340px;
+}
+
+.cm-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.cm-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.cm-btn--cancel {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+}
+
+.cm-btn--cancel:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.cm-btn--danger {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border: none;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+.cm-btn--danger:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+}

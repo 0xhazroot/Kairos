@@ -5,6 +5,7 @@ import Timelines from './pages/Timelines.jsx'
 import Branches from './pages/Branches.jsx'
 import Analytics from './pages/Analytics.jsx'
 import Profile from './pages/Profile.jsx'
+import Notes from './pages/Notes.jsx'
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
         <main className="app-main">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/notes" element={<Notes />} />
             <Route path="/timelines" element={<Timelines />} />
             <Route path="/branches" element={<Branches />} />
             <Route path="/analytics" element={<Analytics />} />

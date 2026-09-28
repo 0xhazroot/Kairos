@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { GitBranch } from 'lucide-react'
+import { storyService } from '../services/storyService.js'
 import './Branches.css'
 
 const branches = [
@@ -7,27 +9,41 @@ const branches = [
     stream: 'Amistad',
     color: 'sage',
     categories: [
-      { name: 'La Raíz - Barrio & Vecindad', desc: 'Amistades de calle, lealtad pura sin filtros ni apariencias.' },
-      { name: 'Crecimiento - Época Escolar', desc: 'Los cómplices de recreo, travesuras y tareas en grupo.' },
-      { name: 'Madurez - Universidad & Chamba', desc: 'Alianzas forjadas en proyectos y madrugadas compartidas.' },
-      { name: 'Círculo de Hierro - Incondicionales', desc: 'Los que están ahí sin importar el tiempo o la distancia.' },
-      { name: 'Vidas Cruzadas - Viajes & Pasatiempos', desc: 'Conexiones de eventos, viajes y momentos irrepetibles.' },
+      { name: 'Barrio & Vecindad', desc: 'Amistades de calle, lealtad pura sin filtros ni apariencias.' },
+      { name: 'Época Escolar & Promo', desc: 'Los cómplices de recreo, travesuras y tareas en grupo.' },
+      { name: 'Universidad & Chamba', desc: 'Alianzas forjadas en proyectos y madrugadas compartidas.' },
+      { name: 'Incondicionales', desc: 'Los que están ahí sin importar el tiempo o la distancia.' },
+      { name: 'Viajes & Salidas', desc: 'Conexiones de eventos, salidas y momentos irrepetibles.' },
     ]
   },
   {
     stream: 'Vínculos del Corazón',
     color: 'lavender',
     categories: [
-      { name: 'Destellos & Inocencia', desc: 'Primeras cartas, miradas tímidas y amores de infancia.' },
-      { name: 'Ilusiones & Amores Platónicos', desc: 'Sentimientos intensos vividos desde la distancia o el silencio.' },
-      { name: 'Conexiones Efímeras - Casi Algo', desc: 'Química a destiempo, lo que pudo haber sido.' },
-      { name: 'Historias Formales & Significativas', desc: 'Relaciones que marcaron etapas y dejaron aprendizajes.' },
-      { name: 'Capítulo Actual - El Presente', desc: 'La historia que estás escribiendo hoy.' },
+      { name: 'Primeras Ilusiones', desc: 'Primeras cartas, miradas tímidas y amores de infancia.' },
+      { name: 'Casi Algo & Conexiones Efímeras', desc: 'Química a destiempo, lo que pudo haber sido.' },
+      { name: 'Historias Formales & Enamorada', desc: 'Relaciones que marcaron etapas y dejaron aprendizajes.' },
+      { name: 'Cruce Multiverso', desc: 'Salidas compartidas donde confluyen amigos y pareja.' },
+      { name: 'Capítulo Actual', desc: 'La historia que estás escribiendo hoy.' },
     ]
   }
 ]
 
 export default function Branches() {
+  const [stories, setStories] = useState([])
+
+  useEffect(() => {
+    storyService.getAll().then(setStories)
+  }, [])
+
+  const getCountForCat = (catName, stream) => {
+    return stories.filter((s) => {
+      const matchCat = s.category && s.category.toLowerCase().includes(catName.toLowerCase().split(' ')[0])
+      const matchStream = stream === 'Amistad' ? s.stream === 'friendship' : s.stream === 'romance' || s.stream === 'convergence'
+      return matchCat || (matchStream && s.category === catName)
+    }).length
+  }
+
   return (
     <motion.div
       className="branches-page"
@@ -37,7 +53,7 @@ export default function Branches() {
     >
       <header className="br-header">
         <h1 className="br-title">Ramificaciones</h1>
-        <p className="br-subtitle">Las dos corrientes principales de tu multiverso y sus derivaciones.</p>
+        <p className="br-subtitle">Las corrientes de tu multiverso y la distribución de tus vivencias reales.</p>
       </header>
 
       <div className="branches-grid">
@@ -63,7 +79,7 @@ export default function Branches() {
                     <h3 className="branch-item-name">{cat.name}</h3>
                     <p className="branch-item-desc">{cat.desc}</p>
                   </div>
-                  <span className="branch-item-count">0</span>
+                  <span className="branch-item-count">{getCountForCat(cat.name, branch.stream)}</span>
                 </motion.div>
               ))}
             </div>
