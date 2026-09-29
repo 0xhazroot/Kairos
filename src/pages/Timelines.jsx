@@ -1,7 +1,18 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { BookOpen, Sparkles, GitMerge, Clock, ArrowRight, Calendar, Users } from 'lucide-react'
+import {
+  BookOpen,
+  Sparkles,
+  GitMerge,
+  Clock,
+  Calendar,
+  Users,
+  Camera,
+  ArrowUpDown,
+  CalendarDays,
+  Plus
+} from 'lucide-react'
 import { storyService } from '../services/storyService.js'
 import ConvergenceViewer from '../components/ConvergenceViewer.jsx'
 import './Timelines.css'
@@ -11,6 +22,7 @@ export default function Timelines() {
   const [stories, setStories] = useState([])
   const [selectedStory, setSelectedStory] = useState(null)
   const [selectedFilter, setSelectedFilter] = useState('all') // 'all' | 'friendship' | 'romance' | 'convergence'
+  const [sortAscending, setSortAscending] = useState(true) // true: Pasado ➔ Presente
 
   useEffect(() => {
     loadStories()
@@ -24,16 +36,25 @@ export default function Timelines() {
     }
   }
 
+  // Filtrado de corrientes
   const filteredStories = stories.filter((s) => {
     if (selectedFilter === 'all') return true
     if (selectedFilter === 'convergence') return s.stream === 'convergence'
     return s.stream === selectedFilter
   })
 
-  const isCurrentConvergence =
-    selectedStory &&
-    (selectedStory.stream === 'convergence' ||
-      (selectedStory.friendshipPerspective && selectedStory.romancePerspective))
+  // Orden cronológico estricto: pasado primero (ascendente) o reciente primero (descendente)
+  const sortedStories = storyService.sortChronologically(filteredStories, sortAscending)
+
+  // Agrupación por Época / Año para evitar mezclas desordenadas
+  const groupedByYear = sortedStories.reduce((acc, story) => {
+    const year = storyService.getStoryYear(story)
+    if (!acc[year]) acc[year] = []
+    acc[year].push(story)
+    return acc
+  }, {})
+
+  const yearKeys = Object.keys(groupedByYear)
 
   return (
     <motion.div
@@ -47,11 +68,21 @@ export default function Timelines() {
         <div>
           <h1 className="tl-title">Línea Temporal & Ramificaciones</h1>
           <p className="tl-subtitle">
-            Tus vivencias fluyendo como corrientes que se bifurcan, convergen y trascienden.
+            Tus vivencias ordenadas cronológicamente, fluyendo como corrientes que se bifurcan y convergen.
           </p>
         </div>
 
         <div className="tl-actions">
+          {/* Alternar orden temporal */}
+          <button
+            className="tl-sort-toggle"
+            onClick={() => setSortAscending(!sortAscending)}
+            title="Cambiar dirección temporal"
+          >
+            <ArrowUpDown size={14} />
+            <span>{sortAscending ? 'Pasado ➔ Presente' : 'Más recientes primero'}</span>
+          </button>
+
           {/* Filtros de corrientes */}
           <div className="tl-filter-group">
             <button
@@ -86,13 +117,13 @@ export default function Timelines() {
             whileTap={{ scale: 0.96 }}
             onClick={() => navigate('/notes')}
           >
-            <BookOpen size={16} />
-            <span>Abrir Diario</span>
+            <Plus size={16} />
+            <span>Escribir Recuerdo</span>
           </motion.button>
         </div>
       </header>
 
-      {/* LIENZO MULTIVERSO: Se adapta perfectamente si hay o no datos */}
+      {/* LIENZO MULTIVERSO */}
       {stories.length === 0 ? (
         /* ESTADO LIMPIO (Cero data inventada) */
         <div className="tl-empty-multiverse">
@@ -108,7 +139,6 @@ export default function Timelines() {
               </linearGradient>
             </defs>
 
-            {/* Corrientes cósmicas en reposo (proporcionales y simétricas) */}
             <motion.path
               d="M 50,150 C 250,120 400,100 500,200 C 600,300 750,280 950,250"
               stroke="url(#emptySage)"
@@ -130,7 +160,6 @@ export default function Timelines() {
               transition={{ duration: 2, ease: 'easeInOut', delay: 0.2 }}
             />
 
-            {/* Núcleo Central de Encuentro */}
             <circle cx="500" cy="200" r="14" fill="#ffffff" stroke="#6F5BA7" strokeWidth="4" />
           </svg>
 
@@ -143,11 +172,10 @@ export default function Timelines() {
             <div className="empty-core-icon">
               <Clock size={32} strokeWidth={1.5} />
             </div>
-            <h2>Tu Línea Temporal está en Blanco</h2>
+            <h2>Tu Línea Temporal está Lista</h2>
             <p>
-              No hay datos ficticios ni memorias inventadas. Todo lo que redactes en tu{' '}
-              <strong>Diario</strong> se dibujará aquí automáticamente, formando tus ramificaciones de
-              Amistad y Vínculos.
+              No hay memorias ficticias. A medida que vayas escribiendo recuerdos pasados y actuales en tu{' '}
+              <strong>Diario</strong>, se ubicarán en su año correspondiente de forma ordenada y limpia.
             </p>
             <button className="btn-primary-multiverse" onClick={() => navigate('/notes')}>
               <Sparkles size={16} />
@@ -156,86 +184,154 @@ export default function Timelines() {
           </motion.div>
         </div>
       ) : (
-        /* VISTA DE LÍNEA MULTIVERSO DINÁMICA (Estructurada y perfectamente alineada) */
+        /* VISTA DE LÍNEA MULTIVERSO CRONOLÓGICA Y AGRUPADA POR ÉPOCAS */
         <div className="tl-river-container">
           {/* Eje Troncal de la Corriente */}
           <div className="tl-river-spine">
             <div className="spine-track"></div>
           </div>
 
-          <div className="tl-milestones-flow">
-            {filteredStories.map((story, index) => {
-              const isSelected = selectedStory?.id === story.id
-              const isConvergence = story.stream === 'convergence'
-              const isFriend = story.stream === 'friendship'
-              const isRomance = story.stream === 'romance'
-
-              // Alternar lado izquierdo/derecho o centro si es convergencia
-              const alignment = isConvergence ? 'center' : isFriend ? 'left' : 'right'
+          <div className="tl-epochs-wrapper">
+            {yearKeys.map((yearKey) => {
+              const storiesInYear = groupedByYear[yearKey]
 
               return (
-                <motion.div
-                  key={story.id}
-                  className={`tl-milestone-row tl-milestone-row--${alignment}`}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.08, duration: 0.4 }}
-                >
-                  {/* Nodo conector en la espina central */}
-                  <div
-                    className={`tl-spine-node ${isConvergence ? 'tl-spine-node--convergence' : isFriend ? 'tl-spine-node--sage' : 'tl-spine-node--lavender'} ${isSelected ? 'is-active' : ''}`}
-                    onClick={() => setSelectedStory(story)}
-                  >
-                    {isConvergence ? (
-                      <GitMerge size={16} />
-                    ) : (
-                      <span className="spine-node-dot"></span>
-                    )}
+                <div key={yearKey} className="tl-epoch-block">
+                  {/* Marcador de Época / Año que separa ordenadamente el tiempo */}
+                  <div className="tl-epoch-divider">
+                    <div className="tl-epoch-pill">
+                      <CalendarDays size={13} />
+                      <span>Época {yearKey}</span>
+                      <span className="tl-epoch-count">({storiesInYear.length})</span>
+                    </div>
                   </div>
 
-                  {/* Tarjeta del Recuerdo (Geométricamente amarrada a su nodo) */}
-                  <motion.div
-                    className={`tl-milestone-card ${isConvergence ? 'tl-milestone-card--convergence' : isFriend ? 'tl-milestone-card--sage' : 'tl-milestone-card--lavender'} ${isSelected ? 'is-selected' : ''}`}
-                    whileHover={{ y: -4, scale: 1.02 }}
-                    onClick={() => setSelectedStory(story)}
-                  >
-                    <div className="card-top-row">
-                      <div className="card-date-badge">
-                        <Calendar size={13} />
-                        <span>{story.date || 'Sin fecha'}</span>
-                      </div>
-                      <span className="card-stream-tag">
-                        {isConvergence
-                          ? '✦ Cruce Multiverso'
-                          : isFriend
-                          ? 'Amistad'
-                          : 'Vínculos'}
-                      </span>
-                    </div>
+                  {/* Historias dentro de esta época */}
+                  <div className="tl-milestones-flow">
+                    {storiesInYear.map((story, idx) => {
+                      const isSelected = selectedStory?.id === story.id
+                      const isConvergence = story.stream === 'convergence'
+                      const isFriend = story.stream === 'friendship'
 
-                    <h3 className="card-milestone-title">{story.title}</h3>
-                    <p className="card-milestone-snippet">{story.summary || story.story?.slice(0, 110) + '...'}</p>
+                      // Alternar lados si no es convergencia
+                      const alignment = isConvergence ? 'center' : idx % 2 === 0 ? 'left' : 'right'
 
-                    {/* Personas Involucradas */}
-                    {story.participants && story.participants.length > 0 && (
-                      <div className="card-people-row">
-                        <Users size={12} className="text-muted" />
-                        <div className="card-people-chips">
-                          {story.participants.slice(0, 3).map((p, i) => (
-                            <span key={i} className="card-person-chip">
-                              {p}
-                            </span>
-                          ))}
-                          {story.participants.length > 3 && (
-                            <span className="card-person-chip-more">
-                              +{story.participants.length - 3}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </motion.div>
-                </motion.div>
+                      const hasCover = Boolean(story.coverImage)
+                      const isCoverGradient = story.coverImage?.startsWith('linear-gradient')
+                      const photoCount = (story.images || []).length
+
+                      return (
+                        <motion.div
+                          key={story.id}
+                          className={`tl-milestone-row tl-milestone-row--${alignment}`}
+                          initial={{ opacity: 0, y: 16 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.35 }}
+                        >
+                          {/* Nodo conector en la espina central */}
+                          <div
+                            className={`tl-spine-node ${
+                              isConvergence
+                                ? 'tl-spine-node--convergence'
+                                : isFriend
+                                ? 'tl-spine-node--sage'
+                                : 'tl-spine-node--lavender'
+                            } ${isSelected ? 'is-active' : ''}`}
+                            onClick={() => setSelectedStory(story)}
+                            title="Seleccionar recuerdo"
+                          >
+                            {isConvergence ? (
+                              <GitMerge size={16} />
+                            ) : (
+                              <span className="spine-node-dot"></span>
+                            )}
+                          </div>
+
+                          {/* Tarjeta del Recuerdo (Estructurada, sin colisiones de texto) */}
+                          <motion.div
+                            className={`tl-milestone-card ${
+                              isConvergence
+                                ? 'tl-milestone-card--convergence'
+                                : isFriend
+                                ? 'tl-milestone-card--sage'
+                                : 'tl-milestone-card--lavender'
+                            } ${isSelected ? 'is-selected' : ''}`}
+                            whileHover={{ y: -3, scale: 1.015 }}
+                            onClick={() => setSelectedStory(story)}
+                          >
+                            {/* Imagen de portada si existe */}
+                            {hasCover && (
+                              <div className="tl-card-cover-wrap">
+                                {isCoverGradient ? (
+                                  <div
+                                    className="tl-card-cover-banner"
+                                    style={{ background: story.coverImage }}
+                                  />
+                                ) : (
+                                  <img
+                                    src={story.coverImage}
+                                    alt={story.title}
+                                    className="tl-card-cover-banner tl-card-cover-banner--img"
+                                  />
+                                )}
+                              </div>
+                            )}
+
+                            <div className="tl-card-inner">
+                              <div className="card-top-row">
+                                <div className="card-date-badge">
+                                  <Calendar size={13} />
+                                  <span>{story.date || 'Sin fecha'}</span>
+                                </div>
+                                <span className="card-stream-tag">
+                                  {isConvergence
+                                    ? '✦ Cruce Multiverso'
+                                    : isFriend
+                                    ? 'Amistad'
+                                    : 'Vínculos'}
+                                </span>
+                              </div>
+
+                              <h3 className="card-milestone-title">{story.title || 'Sin título'}</h3>
+
+                              <p className="card-milestone-snippet">
+                                {story.summary || story.story?.slice(0, 115) + (story.story?.length > 115 ? '...' : '') || 'Sin relato redactado aún...'}
+                              </p>
+
+                              {/* Footer con Participantes y Fotos */}
+                              <div className="card-footer-meta">
+                                {story.participants && story.participants.length > 0 && (
+                                  <div className="card-people-row">
+                                    <Users size={12} className="text-muted" />
+                                    <div className="card-people-chips">
+                                      {story.participants.slice(0, 3).map((p, i) => (
+                                        <span key={i} className="card-person-chip">
+                                          {p}
+                                        </span>
+                                      ))}
+                                      {story.participants.length > 3 && (
+                                        <span className="card-person-chip-more">
+                                          +{story.participants.length - 3}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {photoCount > 0 && (
+                                  <div className="card-photo-indicator" title={`${photoCount} foto(s) guardadas`}>
+                                    <Camera size={12} />
+                                    <span>{photoCount}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </motion.div>
+                        </motion.div>
+                      )
+                    })}
+                  </div>
+                </div>
               )
             })}
           </div>

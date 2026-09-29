@@ -181,6 +181,65 @@ export const storyService = {
     return matches
   },
 
+  // Parseador cronológico inteligente para historias pasadas y presentes
+  parseStoryDate(story) {
+    if (!story) return 0
+    if (story.eventDate) {
+      const t = new Date(story.eventDate).getTime()
+      if (!isNaN(t)) return t
+    }
+    if (story.date) {
+      const yearMatch = story.date.match(/\b(19\d\d|20\d\d)\b/)
+      const monthNames = {
+        enero: 0, febrero: 1, marzo: 2, abril: 3, mayo: 4, junio: 5,
+        julio: 6, agosto: 7, septiembre: 8, setiembre: 8, octubre: 9, noviembre: 10, diciembre: 11
+      }
+      const strLower = story.date.toLowerCase()
+      let foundMonth = -1
+      for (const [mName, mIdx] of Object.entries(monthNames)) {
+        if (strLower.includes(mName)) {
+          foundMonth = mIdx
+          break
+        }
+      }
+      const dayMatch = strLower.match(/\b(\d{1,2})\b/)
+      const day = dayMatch ? parseInt(dayMatch[1], 10) : 1
+
+      if (yearMatch) {
+        const year = parseInt(yearMatch[1], 10)
+        const month = foundMonth >= 0 ? foundMonth : 0
+        return new Date(year, month, day).getTime()
+      }
+    }
+    if (story.epoch) {
+      const epochMatch = story.epoch.match(/\b(19\d\d|20\d\d)\b/)
+      if (epochMatch) {
+        return new Date(parseInt(epochMatch[1], 10), 0, 1).getTime()
+      }
+    }
+    if (story.createdAt) {
+      const t = new Date(story.createdAt).getTime()
+      if (!isNaN(t)) return t
+    }
+    return 0
+  },
+
+  getStoryYear(story) {
+    if (!story) return 'Sin época'
+    const yearMatch = (story.eventDate || story.date || story.epoch || '').match(/\b(19\d\d|20\d\d)\b/)
+    if (yearMatch) return yearMatch[1]
+    if (story.createdAt) return new Date(story.createdAt).getFullYear().toString()
+    return 'Sin época'
+  },
+
+  sortChronologically(stories, ascending = true) {
+    return [...stories].sort((a, b) => {
+      const timeA = this.parseStoryDate(a)
+      const timeB = this.parseStoryDate(b)
+      return ascending ? timeA - timeB : timeB - timeA
+    })
+  },
+
   // Exportar backup JSON completo
   exportJSON() {
     const data = localStorage.getItem(STORAGE_KEY) || '[]'

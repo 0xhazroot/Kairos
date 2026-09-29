@@ -35,6 +35,9 @@ type Story struct {
 	Tags                  []string `json:"tags,omitempty"`
 	Summary               string   `json:"summary"`
 	Story                 string   `json:"story"`
+	CoverImage            string   `json:"coverImage,omitempty"`
+	Images                []string `json:"images,omitempty"`
+	EventDate             string   `json:"eventDate,omitempty"`
 	FriendshipPerspective string   `json:"friendshipPerspective,omitempty"`
 	RomancePerspective    string   `json:"romancePerspective,omitempty"`
 	Coords                struct {
