@@ -1,47 +1,10 @@
 // KAIRÓS — Servicio de Persistencia y Motor de Confluencia en Segundo Plano
 // 100% data real del usuario (cero datos inventados o mock pregrabados)
 
-export const MEMORY_CATEGORIES = [
-  { id: 'canonical', label: 'Momento Canónico', icon: '⚡', badgeClass: 'badge-purple', color: '#9333ea', desc: 'Punto de inflexión que cambió tu rumbo o mentalidad' },
-  { id: 'party', label: 'Noche & Discoteca', icon: '🎵', badgeClass: 'badge-amber', color: '#d97706', desc: 'Salidas de fiesta, música, discotecas y amanecidas con amigos' },
-  { id: 'travel', label: 'Viajes & Aventuras', icon: '✈️', badgeClass: 'badge-blue', color: '#2563eb', desc: 'Paseos, escapadas, viajes y nuevas rutas' },
-  { id: 'growth', label: 'Crecimiento & Metas', icon: '🎓', badgeClass: 'badge-emerald', color: '#059669', desc: 'Universidad, proyectos, trabajo y triunfos personales' },
-  { id: 'reflection', label: 'Reflexión Íntima', icon: '💭', badgeClass: 'badge-rose', color: '#e11d48', desc: 'Pensamientos a solas, lecciones y desahogos' },
-  { id: 'casual', label: 'Salida Casual', icon: '☕', badgeClass: 'badge-sage', color: '#4d926a', desc: 'Charlas de café, cine, comida y planes tranquilos' }
-]
-
 const STORAGE_KEY = 'kairos_multiverse_memories_v2'
 const GO_BACKEND_URL = 'http://localhost:8080/api/stories'
 
 export const storyService = {
-  // Clasificación inteligente en segundo plano según lo que el usuario va redactando
-  autoClassify(text = '') {
-    const lower = text.toLowerCase()
-
-    // 1. Momento Canónico (Puntos de inflexión y cambios de rumbo)
-    if (/(canonic|inflexion|inflexión|cambio mi vida|cambió mi vida|marco|marcó|leccion de vida|lección de vida|punto de quiebre|madurar|nunca volvi|nunca volví|decisivo|destino|revelacion|revelación)/.test(lower)) {
-      return { category: 'Momento Canónico', icon: '⚡', badgeClass: 'badge-purple' }
-    }
-    // 2. Noche & Discoteca / Fiesta / Amigos
-    if (/(discoteca|disco|fiesta|juerga|farra|trago|chela|cerveza|dj|club|perreo|barra|amanecida|copas|antro|musica alta|música alta|bailando|after)/.test(lower)) {
-      return { category: 'Noche & Discoteca', icon: '🎵', badgeClass: 'badge-amber' }
-    }
-    // 3. Viajes & Aventuras
-    if (/(viaje|playa|vuelo|avion|avión|hotel|escapada|carretera|campamento|turismo|cusco|selva|mar|ruta|vacaciones|viajamos|mochilero)/.test(lower)) {
-      return { category: 'Viajes & Aventuras', icon: '✈️', badgeClass: 'badge-blue' }
-    }
-    // 4. Crecimiento & Metas
-    if (/(universidad|uni|tesis|examen|parcial|final|chamba|trabajo|laboral|meta|logro|proyecto|contrato|ascenso|graduacion|graduación|egresado|titulo|título)/.test(lower)) {
-      return { category: 'Crecimiento & Metas', icon: '🎓', badgeClass: 'badge-emerald' }
-    }
-    // 5. Reflexión Íntima
-    if (/(a solas|pensando|reflexion|reflexión|desahogo|madrugando|llorar|melancolia|melancolía|nostalgia|tristeza|silencio|solitario|duda)/.test(lower)) {
-      return { category: 'Reflexión Íntima', icon: '💭', badgeClass: 'badge-rose' }
-    }
-
-    return { category: 'Salida Casual', icon: '☕', badgeClass: 'badge-sage' }
-  },
-
   // Obtener todas las historias
   async getAll() {
     try {
@@ -74,7 +37,7 @@ export const storyService = {
     const newStory = {
       id: 'mem-' + Date.now(),
       icon: storyData.icon || '📝',
-      category: storyData.category || 'Salida Casual',
+      category: storyData.category || '',
       badgeClass: storyData.badgeClass || 'badge-sage',
       createdAt: new Date().toISOString(),
       ...storyData

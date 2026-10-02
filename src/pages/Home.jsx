@@ -40,20 +40,21 @@ export default function Home() {
   }
 
   const convergenceCount = stories.filter((s) => s.stream === 'convergence').length
-  const canonCount = stories.filter((s) => s.category?.toLowerCase().includes('canón')).length
-  const epochsCount = stories.length === 0 ? 0 : new Set(stories.map((s) => s.epoch)).size
+  const epochsCount = stories.length === 0 ? 0 : new Set(stories.map((s) => s.epoch || (s.eventDate ? s.eventDate.slice(0, 4) : ''))).size
 
   const stats = [
     { label: 'Memorias Registradas', value: String(stories.length), icon: Archive, color: 'sage' },
     { label: 'Personas en Órbita', value: String(people.length), icon: Users, color: 'lavender' },
     { label: 'Cruces Multiverso', value: String(convergenceCount), icon: GitMerge, color: 'sand' },
-    { label: 'Puntos Canónicos', value: String(canonCount), icon: Zap, color: 'blue' }
+    { label: 'Años con Memorias', value: String(epochsCount), icon: Calendar, color: 'blue' }
   ]
 
-  // Contar categorías para el widget de balance
+  // Contar categorías personalizadas para el widget
   const categoryCounts = stories.reduce((acc, s) => {
-    const cat = s.category || 'Salida Casual'
-    acc[cat] = (acc[cat] || 0) + 1
+    const cat = (s.category && s.category.trim()) || ''
+    if (cat) {
+      acc[cat] = (acc[cat] || 0) + 1
+    }
     return acc
   }, {})
 
@@ -269,12 +270,12 @@ export default function Home() {
             )}
           </div>
 
-          {/* Widget 3: Ecos por Categoría */}
+          {/* Widget 3: Categorías y Lugares */}
           <div className="home-widget-card">
             <div className="widget-header-row">
               <div className="widget-title-group">
                 <Layers size={16} />
-                <h4 className="widget-heading">Ecos del Multiverso</h4>
+                <h4 className="widget-heading">Tus Categorías & Lugares</h4>
               </div>
             </div>
 
@@ -287,7 +288,7 @@ export default function Home() {
                   </div>
                 ))
               ) : (
-                <p className="widget-empty-hint">Sin categorías registradas aún.</p>
+                <p className="widget-empty-hint">Aún no has asignado categorías o lugares a tus notas.</p>
               )}
             </div>
           </div>
