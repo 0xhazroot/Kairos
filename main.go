@@ -38,6 +38,9 @@ type Story struct {
 	CoverImage            string   `json:"coverImage,omitempty"`
 	Images                []string `json:"images,omitempty"`
 	EventDate             string   `json:"eventDate,omitempty"`
+	SongTitle             string   `json:"songTitle,omitempty"`
+	SongArtist            string   `json:"songArtist,omitempty"`
+	SongUrl               string   `json:"songUrl,omitempty"`
 	FriendshipPerspective string   `json:"friendshipPerspective,omitempty"`
 	RomancePerspective    string   `json:"romancePerspective,omitempty"`
 	Coords                struct {
