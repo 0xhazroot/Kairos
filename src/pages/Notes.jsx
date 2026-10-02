@@ -28,7 +28,7 @@ import {
   ChevronRight,
   Layers
 } from 'lucide-react'
-import { storyService, MEMORY_CATEGORIES } from '../services/storyService.js'
+import { storyService } from '../services/storyService.js'
 import { auditService } from '../services/auditService.js'
 import PeopleSelector from '../components/PeopleSelector.jsx'
 import ConfirmModal from '../components/ConfirmModal.jsx'
@@ -67,7 +67,6 @@ export default function Notes() {
   const [chosenDayInput, setChosenDayInput] = useState(1)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showCoverMenu, setShowCoverMenu] = useState(false)
-  const [showCategoryMenu, setShowCategoryMenu] = useState(false)
   const [showMusicInput, setShowMusicInput] = useState(false)
   const [coverUrlInput, setCoverUrlInput] = useState('')
   const [showUrlCoverInput, setShowUrlCoverInput] = useState(false)
@@ -109,7 +108,7 @@ export default function Notes() {
       date: today.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }),
       epoch: `${yyyy}`,
       icon: '📝',
-      category: 'Salida Casual',
+      category: '',
       badgeClass: 'badge-sage',
       participants: ['Yo'],
       tags: ['Diario'],
@@ -127,7 +126,7 @@ export default function Notes() {
     const sorted = [...list].sort((a, b) => storyService.parseStoryDate(b) - storyService.parseStoryDate(a))
     setStories(sorted)
     setSelectedId(created.id)
-    showToast('Nueva nota creada', 'Tu recuerdo está listo para redactar y clasificar')
+    showToast('Nueva nota creada', 'Tu recuerdo está listo para redactar')
   }
 
   // Crear memoria en año, mes y día específico
@@ -145,7 +144,7 @@ export default function Notes() {
       date: formatted,
       epoch: `${yyyy}`,
       icon: '📝',
-      category: 'Salida Casual',
+      category: '',
       badgeClass: 'badge-sage',
       participants: ['Yo'],
       tags: ['Diario', `${yyyy}`],
@@ -183,17 +182,18 @@ export default function Notes() {
   }
 
   const getStoryYearMonthDay = (story) => {
-    if (story.eventDate && story.eventDate.includes('-')) {
+    if (story?.eventDate && story.eventDate.includes('-')) {
       const parts = story.eventDate.split('-')
       if (parts.length >= 3) {
-        return {
-          year: parseInt(parts[0], 10),
-          month: parseInt(parts[1], 10),
-          day: parseInt(parts[2], 10)
+        const y = parseInt(parts[0], 10)
+        const m = parseInt(parts[1], 10)
+        const d = parseInt(parts[2], 10)
+        if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
+          return { year: y, month: m, day: d }
         }
       }
     }
-    if (story.epoch && !isNaN(parseInt(story.epoch, 10))) {
+    if (story?.epoch && !isNaN(parseInt(story.epoch, 10)) && parseInt(story.epoch, 10) >= 1900) {
       return {
         year: parseInt(story.epoch, 10),
         month: 1,
@@ -201,6 +201,42 @@ export default function Notes() {
       }
     }
     return { year: 2026, month: 1, day: 1 }
+  }
+
+  // Generador de cuadrícula del calendario mensual
+  const getMonthCalendarDays = (year, month) => {
+    const totalDays = new Date(year, month, 0).getDate()
+    const firstDay = new Date(year, month - 1, 1).getDay()
+    const offset = (firstDay + 6) % 7 // Lunes = 0, Domingo = 6
+
+    const cells = []
+    for (let i = 0; i < offset; i++) {
+      cells.push({ day: null, key: `empty-${year}-${month}-${i}` })
+    }
+    for (let d = 1; d <= totalDays; d++) {
+      cells.push({ day: d, key: `d-${year}-${month}-${d}` })
+    }
+    return cells
+  }
+
+  // Obtener partes de fecha para el editor
+  const getNoteDateParts = (note) => {
+    if (note?.eventDate && note.eventDate.includes('-')) {
+      const parts = note.eventDate.split('-')
+      if (parts.length >= 3) {
+        const y = parseInt(parts[0], 10)
+        const m = parseInt(parts[1], 10)
+        const d = parseInt(parts[2], 10)
+        if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
+          return { year: y, month: m, day: d }
+        }
+      }
+    }
+    if (note?.epoch && !isNaN(parseInt(note.epoch, 10)) && parseInt(note.epoch, 10) >= 1900) {
+      return { year: parseInt(note.epoch, 10), month: 1, day: 1 }
+    }
+    const now = new Date()
+    return { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() }
   }
 
   // Estructura del árbol cronológico de 2003 a 2026
@@ -259,59 +295,43 @@ export default function Notes() {
       handleUpdate('summary', text.slice(0, 95))
     }
 
-    // Si la categoría aún no se ha personalizado o es casual, sugerir / asignar categoría inteligente
-    const currentCat = selectedNote.category || 'Salida Casual'
-    if (currentCat === 'Salida Casual' || currentCat === 'Memoria') {
-      const detected = storyService.autoClassify(text + ' ' + (selectedNote.title || ''))
-      if (detected.category !== currentCat) {
-        handleUpdateMultiple({
-          category: detected.category,
-          icon: detected.icon,
-          badgeClass: detected.badgeClass
-        })
-      }
-    }
   }
 
   const handleTitleChange = (title) => {
     handleUpdate('title', title)
-    const currentCat = selectedNote.category || 'Salida Casual'
-    if (currentCat === 'Salida Casual' || currentCat === 'Memoria') {
-      const detected = storyService.autoClassify(title + ' ' + (selectedNote.story || ''))
-      if (detected.category !== currentCat) {
-        handleUpdateMultiple({
-          category: detected.category,
-          icon: detected.icon,
-          badgeClass: detected.badgeClass
-        })
-      }
-    }
   }
 
-  const handleSelectCategory = (cat) => {
+  const handleDatePartChange = (part, val) => {
+    if (!selectedNote) return
+    const current = getNoteDateParts(selectedNote)
+    let y = current.year
+    let m = current.month
+    let d = current.day
+
+    if (part === 'year') {
+      const parsed = parseInt(val, 10)
+      if (!isNaN(parsed)) y = parsed
+    } else if (part === 'month') {
+      const parsed = parseInt(val, 10)
+      if (!isNaN(parsed)) m = parsed
+    } else if (part === 'day') {
+      const parsed = parseInt(val, 10)
+      if (!isNaN(parsed)) d = parsed
+    }
+
+    const maxDays = new Date(y, m, 0).getDate()
+    d = Math.min(Math.max(1, d), maxDays)
+
+    const mm = String(m).padStart(2, '0')
+    const dd = String(d).padStart(2, '0')
+    const iso = `${y}-${mm}-${dd}`
+    const formatted = `${d} de ${MONTH_NAMES[m - 1]} de ${y}`
+
     handleUpdateMultiple({
-      category: cat.label,
-      icon: cat.icon,
-      badgeClass: cat.badgeClass
+      eventDate: iso,
+      date: formatted,
+      epoch: String(y)
     })
-    setShowCategoryMenu(false)
-    showToast('Categoría asignada', `Recuerdo clasificado como "${cat.label}"`)
-  }
-
-  const handleDateChange = (isoValue) => {
-    if (!isoValue) return
-    const parts = isoValue.split('-')
-    if (parts.length === 3) {
-      const dateObj = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10))
-      const formatted = dateObj.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
-      handleUpdateMultiple({
-        eventDate: isoValue,
-        date: formatted,
-        epoch: parts[0]
-      })
-    } else {
-      handleUpdate('eventDate', isoValue)
-    }
   }
 
   // --- Subida y Manejo de Portada ---
@@ -550,22 +570,76 @@ export default function Notes() {
                                     exit={{ opacity: 0, height: 0 }}
                                     transition={{ duration: 0.15 }}
                                   >
-                                    {/* Recuerdos registrados en este mes */}
-                                    {storiesInMonth.map((st) => {
-                                      const isActive = st.id === selectedId
-                                      const dayNum = getStoryYearMonthDay(st).day
-                                      return (
-                                        <div
-                                          key={st.id}
-                                          className={`ns-tree-story-item ${isActive ? 'is-active' : ''}`}
-                                          onClick={() => setSelectedId(st.id)}
-                                        >
-                                          <span className="story-day-tag">Día {dayNum}</span>
-                                          <span className="story-tree-icon">{st.icon || '📝'}</span>
-                                          <span className="story-tree-title">{st.title || 'Sin título'}</span>
-                                        </div>
-                                      )
-                                    })}
+                                    {/* Calendario Mensual con Días */}
+                                    <div className="ns-month-calendar">
+                                      <div className="cal-weekday-labels">
+                                        <span>Lu</span>
+                                        <span>Ma</span>
+                                        <span>Mi</span>
+                                        <span>Ju</span>
+                                        <span>Vi</span>
+                                        <span>Sá</span>
+                                        <span>Do</span>
+                                      </div>
+                                      <div className="cal-days-grid">
+                                        {getMonthCalendarDays(year, mNum).map((cell) => {
+                                          if (!cell.day) {
+                                            return <div key={cell.key} className="cal-cell is-empty" />
+                                          }
+                                          const dayNum = cell.day
+                                          const storiesOnDay = storiesInMonth.filter((st) => getStoryYearMonthDay(st).day === dayNum)
+                                          const hasStory = storiesOnDay.length > 0
+                                          const isSelectedDay = selectedNote &&
+                                            getStoryYearMonthDay(selectedNote).year === year &&
+                                            getStoryYearMonthDay(selectedNote).month === mNum &&
+                                            getStoryYearMonthDay(selectedNote).day === dayNum
+
+                                          return (
+                                            <button
+                                              key={cell.key}
+                                              type="button"
+                                              className={`cal-cell ${hasStory ? 'has-memory' : ''} ${isSelectedDay ? 'is-selected' : ''}`}
+                                              onClick={() => {
+                                                if (hasStory) {
+                                                  setSelectedId(storiesOnDay[0].id)
+                                                } else {
+                                                  handleCreateNoteWithDate(year, mNum, dayNum)
+                                                }
+                                              }}
+                                              title={hasStory ? `${dayNum} ${monthName}: ${storiesOnDay[0].title || 'Recuerdo'}` : `Clic para escribir recuerdo del ${dayNum} de ${monthName} ${year}`}
+                                            >
+                                              <span className="cal-num">{dayNum}</span>
+                                              {hasStory && <span className="cal-dot" />}
+                                            </button>
+                                          )
+                                        })}
+                                      </div>
+                                      <div className="cal-hint-bar">
+                                        <Sparkles size={11} />
+                                        <span>Toca un día para abrir o escribir</span>
+                                      </div>
+                                    </div>
+
+                                    {/* Lista de recuerdos en este mes si existen */}
+                                    {storiesInMonth.length > 0 && (
+                                      <div className="ns-month-stories-list">
+                                        {storiesInMonth.map((st) => {
+                                          const isActive = st.id === selectedId
+                                          const dayNum = getStoryYearMonthDay(st).day
+                                          return (
+                                            <div
+                                              key={st.id}
+                                              className={`ns-tree-story-item ${isActive ? 'is-active' : ''}`}
+                                              onClick={() => setSelectedId(st.id)}
+                                            >
+                                              <span className="story-day-tag">Día {dayNum}</span>
+                                              <span className="story-tree-icon">{st.icon || '📝'}</span>
+                                              <span className="story-tree-title">{st.title || 'Sin título'}</span>
+                                            </div>
+                                          )
+                                        })}
+                                      </div>
+                                    )}
 
                                     {/* Botón directo para crear recuerdo en este Mes & Año */}
                                     <button
@@ -835,70 +909,79 @@ export default function Notes() {
 
             {/* Tabla de Propiedades Estilo Notion */}
             <div className="notion-properties">
-              {/* Categoría Vivencial & Momento Canónico */}
+              {/* Categoría / Lugar Personalizado */}
               <div className="notion-prop-row">
                 <div className="notion-prop-label">
-                  <Layers size={14} />
-                  <span>Categoría</span>
+                  <Tag size={14} />
+                  <span>Categoría / Lugar</span>
                 </div>
-                <div className="notion-prop-value category-selector-wrap">
-                  <button
-                    type="button"
-                    className="notion-cat-pill-btn"
-                    onClick={() => setShowCategoryMenu(!showCategoryMenu)}
-                  >
-                    <span>{selectedNote.category || 'Salida Casual'}</span>
-                    <ChevronDown size={12} />
-                  </button>
-
-                  <AnimatePresence>
-                    {showCategoryMenu && (
-                      <motion.div
-                        className="cat-dropdown-menu"
-                        initial={{ opacity: 0, y: -6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                      >
-                        {MEMORY_CATEGORIES.map((cat) => (
-                          <div
-                            key={cat.id}
-                            className={`cat-dropdown-item ${selectedNote.category === cat.label ? 'is-active' : ''}`}
-                            onClick={() => handleSelectCategory(cat)}
-                          >
-                            <span className="cat-item-icon">{cat.icon}</span>
-                            <div className="cat-item-info">
-                              <span className="cat-item-title">{cat.label}</span>
-                              <span className="cat-item-desc">{cat.desc}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                <div className="notion-prop-value">
+                  <input
+                    type="text"
+                    className="notion-custom-category-input"
+                    placeholder="Escribe una categoría, lugar o evento (ej. Discoteca X, Viaje, Bar...)"
+                    value={selectedNote.category || ''}
+                    onChange={(e) => handleUpdate('category', e.target.value)}
+                  />
                 </div>
               </div>
 
-              {/* Fecha Cronológica */}
+              {/* Fecha Cronológica Exacta */}
               <div className="notion-prop-row">
                 <div className="notion-prop-label">
                   <CalendarDays size={14} />
                   <span>Fecha Cronológica</span>
                 </div>
-                <div className="notion-prop-value flex-date-row">
-                  <input
-                    type="date"
-                    className="notion-date-picker"
-                    value={selectedNote.eventDate || ''}
-                    onChange={(e) => handleDateChange(e.target.value)}
-                    title="Selecciona la fecha exacta en que ocurrió este recuerdo"
-                  />
-                  <input
-                    type="text"
-                    className="notion-inline-input"
-                    placeholder="Texto libre (ej. 14 de Mayo 2023, Ayer...)"
-                    value={selectedNote.date || ''}
-                    onChange={(e) => handleUpdate('date', e.target.value)}
-                  />
+                <div className="notion-prop-value date-picker-control-group">
+                  {/* Selector de Día */}
+                  <div className="date-field-cell">
+                    <span className="date-field-sub">Día:</span>
+                    <select
+                      className="notion-date-select"
+                      value={getNoteDateParts(selectedNote).day}
+                      onChange={(e) => handleDatePartChange('day', e.target.value)}
+                    >
+                      {Array.from(
+                        { length: new Date(getNoteDateParts(selectedNote).year, getNoteDateParts(selectedNote).month, 0).getDate() },
+                        (_, i) => i + 1
+                      ).map((d) => (
+                        <option key={d} value={d}>{d}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Selector de Mes */}
+                  <div className="date-field-cell">
+                    <span className="date-field-sub">Mes:</span>
+                    <select
+                      className="notion-date-select"
+                      value={getNoteDateParts(selectedNote).month}
+                      onChange={(e) => handleDatePartChange('month', e.target.value)}
+                    >
+                      {MONTH_NAMES.map((name, idx) => (
+                        <option key={idx + 1} value={idx + 1}>{name}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Input de Año: 4 dígitos completos */}
+                  <div className="date-field-cell">
+                    <span className="date-field-sub">Año:</span>
+                    <input
+                      type="number"
+                      className="notion-year-input"
+                      min="1900"
+                      max="2099"
+                      step="1"
+                      value={getNoteDateParts(selectedNote).year}
+                      onChange={(e) => handleDatePartChange('year', e.target.value)}
+                    />
+                  </div>
+
+                  {/* Badge con fecha formateada */}
+                  <span className="notion-date-formatted-badge">
+                    {getNoteDateParts(selectedNote).day} de {MONTH_NAMES[getNoteDateParts(selectedNote).month - 1]} de {getNoteDateParts(selectedNote).year}
+                  </span>
                 </div>
               </div>
 

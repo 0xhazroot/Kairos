@@ -1657,4 +1657,201 @@
   align-items: center;
 }
 
+/* ================================================================
+   CALENDARIO MENSUAL BONITO EN EL SIDEBAR (Notes.jsx)
+   ================================================================ */
+.ns-month-calendar {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px;
+  margin-top: 6px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.cal-weekday-labels {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.cal-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+
+.cal-cell {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: #f8fafc;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s ease;
+}
+
+.cal-cell.is-empty {
+  background: transparent;
+  cursor: default;
+  border: none;
+}
+
+.cal-cell:not(.is-empty):hover {
+  background: #ede9fe;
+  color: #6d28d9;
+  transform: scale(1.08);
+  z-index: 2;
+  border-color: #c4b5fd;
+}
+
+.cal-cell.has-memory {
+  background: #ecfdf5;
+  color: #047857;
+  font-weight: 700;
+  border-color: #a7f3d0;
+}
+
+.cal-cell.has-memory:hover {
+  background: #d1fae5;
+  border-color: #6ee7b7;
+}
+
+.cal-cell.is-selected {
+  background: #1e1b4b !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(30, 27, 75, 0.3);
+}
+
+.cal-dot {
+  position: absolute;
+  bottom: 2px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.cal-cell.is-selected .cal-dot {
+  background: #38bdf8;
+}
+
+.cal-hint-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px dashed #e2e8f0;
+  font-size: 0.65rem;
+  color: #64748b;
+}
+
+.ns-month-stories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 6px;
+}
+
+/* ================================================================
+   PROPIEDADES DE FECHA Y CATEGORÍA EXACTA (Notion Editor)
+   ================================================================ */
+.date-picker-control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.date-field-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 3px 8px;
+  transition: border-color 0.15s ease;
+}
+
+.date-field-cell:focus-within {
+  border-color: #6366f1;
+  background: #ffffff;
+}
+
+.date-field-sub {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.notion-date-select {
+  border: none;
+  background: transparent;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1e293b;
+  outline: none;
+  cursor: pointer;
+  padding: 2px 0;
+}
+
+.notion-year-input {
+  border: none;
+  background: transparent;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1e293b;
+  outline: none;
+  width: 65px;
+  padding: 2px 0;
+}
+
+.notion-date-formatted-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #4338ca;
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  padding: 3px 10px;
+  border-radius: 9999px;
+}
+
+/* Categoría / Lugar Personalizado */
+.notion-custom-category-input {
+  width: 100%;
+  max-width: 480px;
+  padding: 6px 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #1e293b;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.notion-custom-category-input:focus {
+  background: #ffffff;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+
 
