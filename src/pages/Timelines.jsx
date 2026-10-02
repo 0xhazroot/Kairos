@@ -11,7 +11,12 @@ import {
   Camera,
   ArrowUpDown,
   CalendarDays,
-  Plus
+  Plus,
+  Music,
+  Disc,
+  Search,
+  X,
+  Filter
 } from 'lucide-react'
 import { storyService } from '../services/storyService.js'
 import ConvergenceViewer from '../components/ConvergenceViewer.jsx'
@@ -22,6 +27,8 @@ export default function Timelines() {
   const [stories, setStories] = useState([])
   const [selectedStory, setSelectedStory] = useState(null)
   const [selectedFilter, setSelectedFilter] = useState('all') // 'all' | 'friendship' | 'romance' | 'convergence'
+  const [selectedPerson, setSelectedPerson] = useState('all')
+  const [personSearch, setPersonSearch] = useState('')
   const [sortAscending, setSortAscending] = useState(true) // true: Pasado ➔ Presente
 
   useEffect(() => {
@@ -36,17 +43,45 @@ export default function Timelines() {
     }
   }
 
-  // Filtrado de corrientes
+  // Lista única de participantes registrados en todas las historias
+  const allPeople = Array.from(
+    new Set(
+      stories.flatMap((s) => s.participants || []).filter((p) => p && p.toLowerCase() !== 'yo')
+    )
+  )
+
+  // Filtrado compuesto: por corriente, por persona seleccionada, y por búsqueda de texto
   const filteredStories = stories.filter((s) => {
-    if (selectedFilter === 'all') return true
-    if (selectedFilter === 'convergence') return s.stream === 'convergence'
-    return s.stream === selectedFilter
+    // Filtro por corriente
+    if (selectedFilter === 'convergence' && s.stream !== 'convergence') return false
+    if (selectedFilter === 'friendship' && s.stream !== 'friendship') return false
+    if (selectedFilter === 'romance' && s.stream !== 'romance') return false
+
+    // Filtro por persona seleccionada
+    if (selectedPerson !== 'all') {
+      const hasPerson = (s.participants || []).some(
+        (p) => p.toLowerCase().trim() === selectedPerson.toLowerCase().trim()
+      )
+      if (!hasPerson) return false
+    }
+
+    // Filtro por búsqueda de persona o texto
+    if (personSearch.trim()) {
+      const q = personSearch.toLowerCase().trim()
+      const matchPeople = (s.participants || []).some((p) => p.toLowerCase().includes(q))
+      const matchTitle = (s.title || '').toLowerCase().includes(q)
+      const matchSong = (s.songTitle || '').toLowerCase().includes(q)
+      const matchCat = (s.category || '').toLowerCase().includes(q)
+      if (!matchPeople && !matchTitle && !matchSong && !matchCat) return false
+    }
+
+    return true
   })
 
   // Orden cronológico estricto: pasado primero (ascendente) o reciente primero (descendente)
   const sortedStories = storyService.sortChronologically(filteredStories, sortAscending)
 
-  // Agrupación por Época / Año para evitar mezclas desordenadas
+  // Agrupación por Época / Año
   const groupedByYear = sortedStories.reduce((acc, story) => {
     const year = storyService.getStoryYear(story)
     if (!acc[year]) acc[year] = []
@@ -123,9 +158,67 @@ export default function Timelines() {
         </div>
       </header>
 
+      {/* BARRA DE FILTRADO POR PERSONA & BÚSQUEDA DIRECTA */}
+      <div className="tl-people-filter-bar">
+        <div className="tl-people-search-wrap">
+          <Search size={14} className="tl-search-icon" />
+          <input
+            type="text"
+            placeholder="Buscar por persona, canción, título..."
+            value={personSearch}
+            onChange={(e) => setPersonSearch(e.target.value)}
+            className="tl-people-search-input"
+          />
+          {personSearch && (
+            <button className="tl-search-clear" onClick={() => setPersonSearch('')}>
+              <X size={13} />
+            </button>
+          )}
+        </div>
+
+        {allPeople.length > 0 && (
+          <div className="tl-people-chips-scroll">
+            <span className="tl-people-label">
+              <Users size={13} />
+              <span>Personas:</span>
+            </span>
+
+            <button
+              className={`tl-person-chip-filter ${selectedPerson === 'all' ? 'is-active' : ''}`}
+              onClick={() => setSelectedPerson('all')}
+            >
+              Todos los Círculos
+            </button>
+
+            {allPeople.map((person) => (
+              <button
+                key={person}
+                className={`tl-person-chip-filter ${selectedPerson === person ? 'is-active' : ''}`}
+                onClick={() => setSelectedPerson(selectedPerson === person ? 'all' : person)}
+              >
+                {person}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Indicador de filtro activo si se seleccionó una persona */}
+      {selectedPerson !== 'all' && (
+        <div className="tl-active-filter-alert">
+          <span>
+            Mostrando únicamente recuerdos compartidos con: <strong>{selectedPerson}</strong> ({filteredStories.length})
+          </span>
+          <button className="tl-active-filter-close" onClick={() => setSelectedPerson('all')}>
+            <X size={13} />
+            <span>Ver todo el multiverso</span>
+          </button>
+        </div>
+      )}
+
       {/* LIENZO MULTIVERSO */}
       {stories.length === 0 ? (
-        /* ESTADO LIMPIO (Cero data inventada) */
+        /* ESTADO LIMPIO */
         <div className="tl-empty-multiverse">
           <svg className="tl-empty-svg" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet">
             <defs>
@@ -183,6 +276,22 @@ export default function Timelines() {
             </button>
           </motion.div>
         </div>
+      ) : filteredStories.length === 0 ? (
+        <div className="tl-no-results-box">
+          <Search size={36} className="text-muted" />
+          <h3>No se encontraron recuerdos con estos filtros</h3>
+          <p>Prueba buscando con otro nombre o limpia el filtro de persona.</p>
+          <button
+            className="tl-reset-filter-btn"
+            onClick={() => {
+              setSelectedPerson('all')
+              setPersonSearch('')
+              setSelectedFilter('all')
+            }}
+          >
+            Restablecer todos los filtros
+          </button>
+        </div>
       ) : (
         /* VISTA DE LÍNEA MULTIVERSO CRONOLÓGICA Y AGRUPADA POR ÉPOCAS */
         <div className="tl-river-container">
@@ -197,7 +306,7 @@ export default function Timelines() {
 
               return (
                 <div key={yearKey} className="tl-epoch-block">
-                  {/* Marcador de Época / Año que separa ordenadamente el tiempo */}
+                  {/* Marcador de Época / Año */}
                   <div className="tl-epoch-divider">
                     <div className="tl-epoch-pill">
                       <CalendarDays size={13} />
@@ -213,12 +322,12 @@ export default function Timelines() {
                       const isConvergence = story.stream === 'convergence'
                       const isFriend = story.stream === 'friendship'
 
-                      // Alternar lados si no es convergencia
                       const alignment = isConvergence ? 'center' : idx % 2 === 0 ? 'left' : 'right'
 
                       const hasCover = Boolean(story.coverImage)
                       const isCoverGradient = story.coverImage?.startsWith('linear-gradient')
                       const photoCount = (story.images || []).length
+                      const hasMusic = Boolean(story.songTitle)
 
                       return (
                         <motion.div
@@ -247,7 +356,7 @@ export default function Timelines() {
                             )}
                           </div>
 
-                          {/* Tarjeta del Recuerdo (Estructurada, sin colisiones de texto) */}
+                          {/* Tarjeta del Recuerdo */}
                           <motion.div
                             className={`tl-milestone-card ${
                               isConvergence
@@ -283,13 +392,21 @@ export default function Timelines() {
                                   <Calendar size={13} />
                                   <span>{story.date || 'Sin fecha'}</span>
                                 </div>
-                                <span className="card-stream-tag">
-                                  {isConvergence
-                                    ? '✦ Cruce Multiverso'
-                                    : isFriend
-                                    ? 'Amistad'
-                                    : 'Vínculos'}
-                                </span>
+
+                                <div className="card-top-tags">
+                                  {story.category && (
+                                    <span className="card-cat-badge">
+                                      {story.icon || '🏷️'} {story.category}
+                                    </span>
+                                  )}
+                                  <span className="card-stream-tag">
+                                    {isConvergence
+                                      ? '✦ Cruce'
+                                      : isFriend
+                                      ? 'Amistad'
+                                      : 'Vínculos'}
+                                  </span>
+                                </div>
                               </div>
 
                               <h3 className="card-milestone-title">{story.title || 'Sin título'}</h3>
@@ -297,6 +414,17 @@ export default function Timelines() {
                               <p className="card-milestone-snippet">
                                 {story.summary || story.story?.slice(0, 115) + (story.story?.length > 115 ? '...' : '') || 'Sin relato redactado aún...'}
                               </p>
+
+                              {/* Canción Ancla / Música si la tiene */}
+                              {hasMusic && (
+                                <div className="card-music-pill">
+                                  <Disc size={12} className="card-music-icon" />
+                                  <span className="card-music-title">{story.songTitle}</span>
+                                  {story.songArtist && (
+                                    <span className="card-music-artist">• {story.songArtist}</span>
+                                  )}
+                                </div>
+                              )}
 
                               {/* Footer con Participantes y Fotos */}
                               <div className="card-footer-meta">

@@ -36,6 +36,144 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
+}
+
+.cv-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cv-action-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cv-action-edit-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.cv-collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cv-collapse-btn:hover {
+  background: rgba(0, 0, 0, 0.09);
+  color: #0f172a;
+}
+
+/* Barra Flotante Colapsada */
+.cv-collapsed-bar {
+  position: sticky;
+  bottom: 24px;
+  margin-top: 24px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid #cbd5e1;
+  border-radius: 24px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12), 0 0 20px rgba(99, 102, 241, 0.1);
+  z-index: 20;
+}
+
+.cv-collapsed-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.cv-collapsed-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #6366f1;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.cv-collapsed-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.cv-collapsed-date {
+  font-size: 0.76rem;
+  color: #64748b;
+}
+
+.cv-collapsed-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cv-collapsed-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 14px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cv-collapsed-expand-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 14px;
+  background: #1e1b4b;
+  color: #ffffff;
+  border: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(30, 27, 75, 0.25);
+  transition: all 0.2s ease;
+}
+
+.cv-collapsed-expand-btn:hover {
+  transform: translateY(-1px);
+  background: #312e81;
 }
 
 .cv-convergence-badge-wrap {
@@ -346,8 +484,62 @@
 }
 
 /* ================================================================
-   PORTADA Y GALERÍA EN VISOR
+   PORTADA, MÚSICA Y GALERÍA EN VISOR
    ================================================================ */
+.cv-music-row {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #fdf4ff 0%, #f5f3ff 100%);
+  border: 1px solid rgba(111, 91, 167, 0.25);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  width: fit-content;
+}
+
+.cv-music-disc {
+  color: #6f5ba7;
+  animation: spinSlow 8s linear infinite;
+}
+
+.cv-music-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #4b367d;
+}
+
+.cv-music-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #1e1b4b;
+}
+
+.cv-music-artist {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.cv-music-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #6f5ba7;
+  text-decoration: none;
+  margin-left: 4px;
+  transition: transform 0.15s;
+}
+
+.cv-music-link:hover {
+  transform: scale(1.05);
+}
+
 .cv-cover-wrapper {
   width: 100%;
   height: 180px;

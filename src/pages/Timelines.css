@@ -535,6 +535,226 @@
   border-radius: 9999px;
 }
 
+/* Tags superiores en tarjeta */
+.card-top-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.card-cat-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Píldora de Canción en Tarjeta */
+.card-music-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #fdf8f6 0%, #f5f3ff 100%);
+  border: 1px solid rgba(111, 91, 167, 0.2);
+  width: fit-content;
+  margin-top: 4px;
+}
+
+.card-music-icon {
+  color: #6f5ba7;
+  animation: spinSlow 8s linear infinite;
+}
+
+.card-music-title {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #1e1b4b;
+}
+
+.card-music-artist {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+/* ================================================================
+   BARRA DE FILTRADO POR PERSONA & BÚSQUEDA DIRECTA
+   ================================================================ */
+.tl-people-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 10px 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+.tl-people-search-wrap {
+  position: relative;
+  min-width: 240px;
+  flex: 1;
+}
+
+.tl-search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+.tl-people-search-input {
+  width: 100%;
+  padding: 6px 28px 6px 32px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  outline: none;
+  background: #ffffff;
+}
+
+.tl-people-search-input:focus {
+  border-color: #6f5ba7;
+  box-shadow: 0 0 0 3px rgba(111, 91, 167, 0.1);
+}
+
+.tl-search-clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.tl-people-chips-scroll {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.tl-people-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #64748b;
+  margin-right: 4px;
+}
+
+.tl-person-chip-filter {
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.tl-person-chip-filter:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+.tl-person-chip-filter.is-active {
+  background: #111827;
+  color: #ffffff;
+  border-color: #111827;
+}
+
+/* Banner de Filtro Activo */
+.tl-active-filter-alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 18px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+  font-size: 0.85rem;
+  color: #1e40af;
+}
+
+.tl-active-filter-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #ffffff;
+  border: 1px solid #93c5fd;
+  color: #1e40af;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tl-active-filter-close:hover {
+  background: #dbeafe;
+}
+
+/* No results state */
+.tl-no-results-box {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px dashed #cbd5e1;
+  border-radius: var(--radius-xl);
+  padding: 48px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.tl-no-results-box h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: #1e293b;
+}
+
+.tl-no-results-box p {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.tl-reset-filter-btn {
+  margin-top: 8px;
+  padding: 8px 16px;
+  background: #111827;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 /* ================================================================
    RESPONSIVIDAD Y PREVENCIÓN DE COLISIONES
    ================================================================ */
@@ -571,3 +791,4 @@
     padding-left: 12px;
   }
 }
+
