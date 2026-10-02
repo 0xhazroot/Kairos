@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Home, Clock, GitBranch, BarChart3, User, Shield, Download, BookOpen } from 'lucide-react'
+import { Home, Clock, Sparkles, BarChart3, User, Shield, Download, BookOpen } from 'lucide-react'
 import { storyService } from '../services/storyService.js'
 import './Sidebar.css'
 
@@ -8,7 +8,7 @@ const navItems = [
   { path: '/', label: 'Home', icon: Home },
   { path: '/notes', label: 'Diario & Notas', icon: BookOpen },
   { path: '/timelines', label: 'Timelines', icon: Clock },
-  { path: '/branches', label: 'Branches', icon: GitBranch },
+  { path: '/constellation', label: 'Constelación', icon: Sparkles },
   { path: '/analytics', label: 'Analytics', icon: BarChart3 },
   { path: '/profile', label: 'Profile', icon: User },
 ]

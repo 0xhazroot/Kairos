@@ -10,16 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "framer-motion": "^12.12.1",
+    "lucide-react": "^0.511.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.0",
-    "framer-motion": "^12.12.1",
-    "lucide-react": "^0.511.0"
+    "three": "^0.186.1"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.5.2",
-    "vite": "^6.3.5",
     "@types/react": "^19.1.0",
-    "@types/react-dom": "^19.1.0"
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.5.2",
+    "vite": "^6.3.5"
   }
 }
