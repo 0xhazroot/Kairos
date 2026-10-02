@@ -87,6 +87,394 @@
   outline: none;
 }
 
+/* Selector de Modo en Sidebar */
+.ns-mode-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  background: #f1f1ef;
+  padding: 3px;
+  border-radius: 8px;
+}
+
+.ns-mode-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 4px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ns-mode-tab.active {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Árbol de Épocas & Años (2003-2026) */
+.ns-epochs-tree {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ns-tree-year-block {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ns-tree-year-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.ns-tree-year-header:hover {
+  background: #f1f1ef;
+}
+
+.ns-tree-year-header.is-open {
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.year-title-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.year-icon {
+  color: #6366f1;
+}
+
+.year-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.year-count-pill {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: #f1f5f9;
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+.year-count-pill.has-stories {
+  background: #e0e7ff;
+  color: #4338ca;
+  font-weight: 700;
+}
+
+/* Lista de Meses */
+.ns-tree-months-list {
+  padding-left: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-left: 2px solid #e0e7ff;
+  margin-left: 16px;
+  margin-top: 4px;
+  margin-bottom: 6px;
+}
+
+.ns-tree-month-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.ns-tree-month-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.ns-tree-month-header:hover {
+  background: #f1f5f9;
+}
+
+.ns-tree-month-header.is-open {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+.month-title-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.month-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.month-count-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #7c3aed;
+  background: #ede9fe;
+  padding: 1px 6px;
+  border-radius: 8px;
+}
+
+/* Recuerdos en el Mes */
+.ns-tree-stories-container {
+  padding-left: 10px;
+  margin-left: 12px;
+  border-left: 1.5px dashed #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+  margin-bottom: 6px;
+}
+
+.ns-tree-story-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 0.78rem;
+}
+
+.ns-tree-story-item:hover {
+  background: #f1f5f9;
+}
+
+.ns-tree-story-item.is-active {
+  background: #1e1b4b;
+  color: #ffffff;
+}
+
+.story-day-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.ns-tree-story-item.is-active .story-day-tag {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.story-tree-icon {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.story-tree-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.btn-add-in-month {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px dashed rgba(99, 102, 241, 0.3);
+  color: #4f46e5;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-add-in-month:hover {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: #4f46e5;
+}
+
+/* Modal Selector de Día */
+.day-picker-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+
+.day-picker-modal {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dpm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dpm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6366f1;
+}
+
+.dpm-close-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+}
+
+.dpm-title {
+  font-family: var(--font-editorial, 'Playfair Display', serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.dpm-desc {
+  font-size: 0.84rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.dpm-input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.dpm-label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dpm-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dpm-number-input {
+  width: 70px;
+  padding: 8px 12px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  text-align: center;
+  outline: none;
+}
+
+.dpm-number-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.dpm-day-preview {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.dpm-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.dpm-btn-cancel {
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dpm-btn-create {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(67, 56, 202, 0.25);
+  transition: all 0.2s ease;
+}
+
+.dpm-btn-create:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(67, 56, 202, 0.35);
+}
+
 .ns-list {
   flex: 1;
   overflow-y: auto;
@@ -1020,4 +1408,253 @@
   align-items: center;
   justify-content: center;
 }
+
+/* ================================================================
+   SELECTOR DE CATEGORÍAS VIVENCIALES
+   ================================================================ */
+.category-selector-wrap {
+  position: relative;
+}
+
+.notion-cat-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.notion-cat-pill-btn:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.cat-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 280px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 6px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cat-dropdown-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.cat-dropdown-item:hover {
+  background: #f8fafc;
+}
+
+.cat-dropdown-item.is-active {
+  background: #f1f5f9;
+  font-weight: 700;
+}
+
+.cat-item-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.cat-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cat-item-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.cat-item-desc {
+  font-size: 0.72rem;
+  color: #64748b;
+  line-height: 1.3;
+}
+
+/* ================================================================
+   BANDA SONORA / CANCIÓN ANCLA
+   ================================================================ */
+.music-prop-cell {
+  width: 100%;
+}
+
+.notion-music-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #fbfbfa 0%, #f3f4f6 100%);
+  border: 1px solid #e2e8f0;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.music-card-icon {
+  color: #6f5ba7;
+  display: flex;
+  align-items: center;
+}
+
+.spinning-disc {
+  animation: spinSlow 8s linear infinite;
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.music-card-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+}
+
+.music-title {
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.music-artist {
+  color: #64748b;
+  font-size: 0.75rem;
+}
+
+.music-card-link {
+  color: #6f5ba7;
+  display: flex;
+  align-items: center;
+  transition: transform 0.15s;
+}
+
+.music-card-link:hover {
+  transform: scale(1.15);
+}
+
+.music-card-edit {
+  background: transparent;
+  border: none;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.music-card-edit:hover {
+  color: #1e293b;
+  text-decoration: underline;
+}
+
+.music-card-remove {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.music-card-remove:hover {
+  color: #ef4444;
+}
+
+.btn-add-music {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px dashed #cbd5e1;
+  color: #64748b;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-add-music:hover {
+  background: #f8fafc;
+  color: #1e293b;
+  border-color: #94a3b8;
+}
+
+.music-input-form {
+  margin-top: 8px;
+  padding: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.music-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.music-field-input {
+  padding: 6px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  outline: none;
+  background: #ffffff;
+}
+
+.music-field-input:focus {
+  border-color: #6f5ba7;
+}
+
+.music-form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-music-save {
+  padding: 5px 14px;
+  background: #111827;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ns-music-dot {
+  color: #6f5ba7;
+  display: flex;
+  align-items: center;
+}
+
 
