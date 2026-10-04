@@ -38,6 +38,7 @@ type Story struct {
 	CoverImage            string   `json:"coverImage,omitempty"`
 	Images                []string `json:"images,omitempty"`
 	EventDate             string   `json:"eventDate,omitempty"`
+	Importance            int      `json:"importance,omitempty"`
 	SongTitle             string   `json:"songTitle,omitempty"`
 	SongArtist            string   `json:"songArtist,omitempty"`
 	SongUrl               string   `json:"songUrl,omitempty"`
@@ -68,6 +69,7 @@ type Profile struct {
 	Bio           string `json:"bio"`
 	AvatarIcon    string `json:"avatarIcon"`
 	AvatarColor   string `json:"avatarColor"`
+	AvatarImage   string `json:"avatarImage,omitempty"`
 	StartedAt     string `json:"startedAt"`
 	TimelineMotto string `json:"timelineMotto"`
 }

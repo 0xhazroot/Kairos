@@ -1,6 +1,15 @@
 // KAIRÓS — Servicio de Persistencia y Motor de Confluencia en Segundo Plano
 // 100% data real del usuario (cero datos inventados o mock pregrabados)
 
+export const IMPORTANCE_LEVELS = [
+  { level: 6, label: 'Inolvidable / Hito Vital', color: '#a855f7', bg: 'rgba(168, 85, 247, 0.15)', border: '#c084fc', desc: 'Punto de inflexión o momento que cambió tu vida' },
+  { level: 5, label: 'Muy Importante', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.15)', border: '#fbbf24', desc: 'Viaje memorable, aniversario o evento decisivo' },
+  { level: 4, label: 'Especial / Destacado', color: '#10b981', bg: 'rgba(16, 185, 129, 0.15)', border: '#34d399', desc: 'Salida con amigos, fiesta clave o gran noticia' },
+  { level: 3, label: 'Significativo / Buen Día', color: '#0ea5e9', bg: 'rgba(14, 165, 233, 0.15)', border: '#38bdf8', desc: 'Salida casual, café, charla tranquila o cine' },
+  { level: 2, label: 'Tranquilo / Breve', color: '#8b5cf6', bg: 'rgba(139, 92, 246, 0.15)', border: '#a78bfa', desc: 'Reflexión a solas, apunte o detalle simple' },
+  { level: 1, label: 'Rutinario / Registro', color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.15)', border: '#cbd5e1', desc: 'Apunte rápido del día o rutina diaria' }
+]
+
 const STORAGE_KEY = 'kairos_multiverse_memories_v2'
 const GO_BACKEND_URL = 'http://localhost:8080/api/stories'
 
@@ -38,6 +47,7 @@ export const storyService = {
       id: 'mem-' + Date.now(),
       icon: storyData.icon || '📝',
       category: storyData.category || '',
+      importance: storyData.importance !== undefined ? Number(storyData.importance) : 3,
       badgeClass: storyData.badgeClass || 'badge-sage',
       createdAt: new Date().toISOString(),
       ...storyData

@@ -8,11 +8,8 @@ import {
   TrendingUp,
   Sparkles,
   ArrowRight,
-  GitMerge,
   BookOpen,
   Users,
-  Compass,
-  Zap,
   Calendar,
   Layers,
   ChevronRight
@@ -39,13 +36,13 @@ export default function Home() {
     setPeople(peopleList || [])
   }
 
-  const convergenceCount = stories.filter((s) => s.stream === 'convergence').length
+  const friendshipCount = stories.filter((s) => s.stream === 'friendship').length
   const epochsCount = stories.length === 0 ? 0 : new Set(stories.map((s) => s.epoch || (s.eventDate ? s.eventDate.slice(0, 4) : ''))).size
 
   const stats = [
     { label: 'Memorias Registradas', value: String(stories.length), icon: Archive, color: 'sage' },
     { label: 'Personas en Órbita', value: String(people.length), icon: Users, color: 'lavender' },
-    { label: 'Cruces Multiverso', value: String(convergenceCount), icon: GitMerge, color: 'sand' },
+    { label: 'Historias de Amistad', value: String(friendshipCount), icon: Users, color: 'sand' },
     { label: 'Años con Memorias', value: String(epochsCount), icon: Calendar, color: 'blue' }
   ]
 
@@ -94,10 +91,10 @@ export default function Home() {
             className="home-btn-secondary"
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
-            onClick={() => navigate('/constellation')}
+            onClick={() => navigate('/timelines')}
           >
-            <Compass size={16} />
-            <span>Ver Constelación 3D</span>
+            <Clock size={16} />
+            <span>Ver Líneas Temporales</span>
           </motion.button>
         </div>
       </header>
@@ -218,18 +215,18 @@ export default function Home() {
 
         {/* Columna Derecha: Hub de Widgets & Acceso Directo (~35%) */}
         <aside className="home-sidebar-col">
-          {/* Widget 1: Acceso a Constelación 3D */}
-          <div className="home-widget-card widget-cosmos" onClick={() => navigate('/constellation')}>
+          {/* Widget 1: Acceso a Timelines */}
+          <div className="home-widget-card widget-cosmos" onClick={() => navigate('/timelines')}>
             <div className="widget-cosmos-header">
-              <span className="cosmos-badge">✦ COSMOS 3D</span>
-              <Compass size={18} className="text-sky-400" />
+              <span className="cosmos-badge">✦ CRONOLOGÍA</span>
+              <Clock size={18} className="text-sky-400" />
             </div>
-            <h3 className="cosmos-title">Constelación de Vínculos</h3>
+            <h3 className="cosmos-title">Líneas Temporales</h3>
             <p className="cosmos-desc">
-              Explora tus personas y vivencias en un espacio 3D interactivo con órbitas, galaxias y lazos cuánticos.
+              Explora tus recuerdos en una secuencia cronológica fluida organizada por corrientes de vida.
             </p>
             <div className="cosmos-btn-row">
-              <span>Abrir Navegador 3D</span>
+              <span>Abrir Timelines</span>
               <ArrowRight size={14} />
             </div>
           </div>

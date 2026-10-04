@@ -1,14 +1,12 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Home, Clock, Sparkles, BarChart3, User, Shield, Download, BookOpen } from 'lucide-react'
-import { storyService } from '../services/storyService.js'
+import { Home, Clock, BarChart3, User, BookOpen } from 'lucide-react'
 import './Sidebar.css'
 
 const navItems = [
   { path: '/', label: 'Home', icon: Home },
   { path: '/notes', label: 'Diario & Notas', icon: BookOpen },
   { path: '/timelines', label: 'Timelines', icon: Clock },
-  { path: '/constellation', label: 'Constelación', icon: Sparkles },
   { path: '/analytics', label: 'Analytics', icon: BarChart3 },
   { path: '/profile', label: 'Profile', icon: User },
 ]
@@ -42,17 +40,6 @@ export default function Sidebar() {
           )
         })}
       </nav>
-
-      <div className="sidebar-footer">
-        <div className="sidebar-security-badge">
-          <Shield size={14} strokeWidth={1.8} />
-          <span>100% Local & Privado</span>
-        </div>
-        <button className="sidebar-export-btn" onClick={() => storyService.exportJSON()}>
-          <Download size={15} strokeWidth={1.8} />
-          <span>Exportar Backup</span>
-        </button>
-      </div>
     </aside>
   )
 }

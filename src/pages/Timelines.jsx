@@ -53,7 +53,6 @@ export default function Timelines() {
   // Filtrado compuesto: por corriente, por persona seleccionada, y por búsqueda de texto
   const filteredStories = stories.filter((s) => {
     // Filtro por corriente
-    if (selectedFilter === 'convergence' && s.stream !== 'convergence') return false
     if (selectedFilter === 'friendship' && s.stream !== 'friendship') return false
     if (selectedFilter === 'romance' && s.stream !== 'romance') return false
 
@@ -137,12 +136,6 @@ export default function Timelines() {
               onClick={() => setSelectedFilter('romance')}
             >
               <span className="dot dot--lavender"></span> Vínculos
-            </button>
-            <button
-              className={`tl-filter-pill tl-filter-pill--convergence ${selectedFilter === 'convergence' ? 'is-active' : ''}`}
-              onClick={() => setSelectedFilter('convergence')}
-            >
-              <span className="dot dot--convergence"></span> Cruces
             </button>
           </div>
 
